@@ -602,7 +602,8 @@ const els = {
   categoryError: document.getElementById("categoryError"),
   doneCategoriesBtn: document.getElementById("doneCategoriesBtn"),
   setupError: document.getElementById("setupError"),
-  passMessage: document.getElementById("passMessage"),
+  revealProgress: document.getElementById("revealProgress"),
+  playerRevealList: document.getElementById("playerRevealList"),
   revealTitle: document.getElementById("revealTitle"),
   roleLine: document.getElementById("roleLine"),
   hintLine: document.getElementById("hintLine"),
@@ -612,7 +613,6 @@ const els = {
   resultText: document.getElementById("resultText"),
   answerText: document.getElementById("answerText"),
   startBtn: document.getElementById("startBtn"),
-  revealBtn: document.getElementById("revealBtn"),
   hideBtn: document.getElementById("hideBtn"),
   toVoteBtn: document.getElementById("toVoteBtn"),
   revealResultBtn: document.getElementById("revealResultBtn"),
@@ -629,7 +629,8 @@ const state = {
   word: "",
   playerNames: [],
   startingPlayerIndex: 0,
-  currentPlayer: 0,
+  currentPlayer: -1,
+  revealedPlayers: [],
   roles: []
 };
 
@@ -1091,7 +1092,8 @@ function setupRound() {
     state.roles[index] = { imposter: true, word: null };
   });
 
-  state.currentPlayer = 0;
+  state.currentPlayer = -1;
+  state.revealedPlayers = Array.from({ length: state.players }, () => false);
   state.startingPlayerIndex = Math.floor(Math.random() * state.players);
   els.discussionCategory.textContent = `Category this round: ${state.category}`;
   els.discussionStarter.textContent = `${playerNameWithNumber(state.startingPlayerIndex)} starts this round.`;
@@ -1112,13 +1114,33 @@ function renderVoteOptions() {
 }
 
 function goPass() {
-  els.passMessage.textContent = `Give the phone to ${playerNameWithNumber(state.currentPlayer)}.`;
+  renderPlayerRevealList();
   show(els.pass);
 }
 
-function revealRole() {
-  const role = state.roles[state.currentPlayer];
-  els.revealTitle.textContent = playerNameWithNumber(state.currentPlayer);
+function renderPlayerRevealList() {
+  els.playerRevealList.textContent = "";
+  state.playerNames.forEach((name, index) => {
+    const button = document.createElement("button");
+    button.type = "button";
+    button.textContent = state.revealedPlayers[index] ? `${name} (Viewed)` : name;
+    button.disabled = state.revealedPlayers[index];
+    if (state.revealedPlayers[index]) {
+      button.classList.add("revealed-player");
+    } else {
+      button.addEventListener("click", () => revealRole(index));
+    }
+    els.playerRevealList.append(button);
+  });
+
+  const revealedCount = state.revealedPlayers.filter(Boolean).length;
+  els.revealProgress.textContent = `${revealedCount}/${state.players} players have viewed roles.`;
+}
+
+function revealRole(index) {
+  state.currentPlayer = index;
+  const role = state.roles[index];
+  els.revealTitle.textContent = playerNameWithNumber(index);
 
   if (role.imposter) {
     els.roleLine.textContent = "You are the IMPOSTER.";
@@ -1133,11 +1155,19 @@ function revealRole() {
 }
 
 function hideRole() {
-  state.currentPlayer += 1;
-  if (state.currentPlayer < state.players) {
+  if (!Number.isInteger(state.currentPlayer) || state.currentPlayer < 0 || state.currentPlayer >= state.players) {
     goPass();
     return;
   }
+
+  state.revealedPlayers[state.currentPlayer] = true;
+  state.currentPlayer = -1;
+
+  if (!state.revealedPlayers.every(Boolean)) {
+    goPass();
+    return;
+  }
+
   show(els.discussion);
 }
 
@@ -1195,7 +1225,6 @@ els.startBtn.addEventListener("click", () => {
   goPass();
 });
 
-els.revealBtn.addEventListener("click", revealRole);
 els.hideBtn.addEventListener("click", hideRole);
 els.toVoteBtn.addEventListener("click", () => show(els.vote));
 els.revealResultBtn.addEventListener("click", revealResult);

@@ -232,6 +232,19 @@ textarea {
   padding: 8px 12px;
 }
 
+.player-reveal-grid {
+  display: grid;
+  gap: 10px;
+}
+
+.player-reveal-grid button {
+  margin-top: 0;
+}
+
+.player-reveal-grid button.revealed-player {
+  opacity: 0.65;
+}
+
 @media (max-width: 420px) {
   .category-grid {
     grid-template-columns: 1fr;
