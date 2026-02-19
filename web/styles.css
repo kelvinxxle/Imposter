@@ -151,8 +151,7 @@ button.primary {
 .player-names {
   display: grid;
   gap: 8px;
-  max-height: 260px;
-  overflow: auto;
+  overflow: visible;
   padding-right: 2px;
 }
 

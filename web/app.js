@@ -607,6 +607,7 @@ const els = {
   roleLine: document.getElementById("roleLine"),
   hintLine: document.getElementById("hintLine"),
   discussionCategory: document.getElementById("discussionCategory"),
+  discussionStarter: document.getElementById("discussionStarter"),
   voteInput: document.getElementById("voteInput"),
   resultText: document.getElementById("resultText"),
   answerText: document.getElementById("answerText"),
@@ -627,6 +628,7 @@ const state = {
   category: "",
   word: "",
   playerNames: [],
+  startingPlayerIndex: 0,
   currentPlayer: 0,
   roles: []
 };
@@ -1090,7 +1092,9 @@ function setupRound() {
   });
 
   state.currentPlayer = 0;
+  state.startingPlayerIndex = Math.floor(Math.random() * state.players);
   els.discussionCategory.textContent = `Category this round: ${state.category}`;
+  els.discussionStarter.textContent = `${playerNameWithNumber(state.startingPlayerIndex)} starts this round.`;
   clearSetupError();
   renderVoteOptions();
   persistRoundSettings();
