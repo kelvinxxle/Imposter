@@ -1,0 +1,85 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover, user-scalable=no" />
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+    <meta name="apple-mobile-web-app-title" content="Imposter" />
+    <meta name="theme-color" content="#0b1020" />
+    <title>Imposter — Mobile Web App</title>
+    <link rel="manifest" href="manifest.webmanifest" />
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <main class="app-shell">
+      <header class="topbar">
+        <h1>Imposter</h1>
+        <p class="subtitle">Pass-and-play, built for iPhone web</p>
+      </header>
+
+      <section id="setupScreen" class="screen card active">
+        <h2>New Round</h2>
+        <label>Players
+          <input id="playersInput" type="number" min="3" max="12" value="6" inputmode="numeric" />
+        </label>
+        <label>Imposters
+          <input id="impostersInput" type="number" min="1" max="3" value="1" inputmode="numeric" />
+        </label>
+        <label>Discussion timer (minutes)
+          <input id="minutesInput" type="number" min="1" max="20" value="5" inputmode="numeric" />
+        </label>
+        <label>Category
+          <select id="categoryInput"></select>
+        </label>
+        <button id="startBtn" class="primary">Start round</button>
+        <p id="setupError" class="error"></p>
+      </section>
+
+      <section id="passScreen" class="screen card">
+        <h2>Pass the phone</h2>
+        <p id="passMessage">Give the phone to Player 1.</p>
+        <p class="hint">Make sure nobody else can see the screen.</p>
+        <button id="revealBtn" class="primary">Reveal role</button>
+      </section>
+
+      <section id="revealScreen" class="screen card">
+        <h2 id="revealTitle">Player 1</h2>
+        <p id="roleLine" class="role"></p>
+        <p id="hintLine" class="hint"></p>
+        <button id="hideBtn" class="primary">Hide role</button>
+      </section>
+
+      <section id="discussionScreen" class="screen card">
+        <h2>Discuss</h2>
+        <p>Ask each other questions and find inconsistencies.</p>
+        <div id="timer" class="timer">05:00</div>
+        <div class="button-row">
+          <button id="startTimerBtn" class="primary">Start timer</button>
+          <button id="skipTimerBtn">Skip to vote</button>
+        </div>
+      </section>
+
+      <section id="voteScreen" class="screen card">
+        <h2>Vote</h2>
+        <p>Who is an imposter? Enter one player number at a time.</p>
+        <label>Voted player number
+          <input id="voteInput" type="number" min="1" max="12" value="1" inputmode="numeric" />
+        </label>
+        <button id="revealResultBtn" class="primary">Reveal result</button>
+      </section>
+
+      <section id="resultScreen" class="screen card">
+        <h2>Round result</h2>
+        <p id="resultText"></p>
+        <p id="answerText"></p>
+        <div class="button-row">
+          <button id="playAgainBtn" class="primary">Play again</button>
+          <button id="newRoundBtn">New settings</button>
+        </div>
+      </section>
+    </main>
+
+    <script src="app.js"></script>
+  </body>
+</html>
