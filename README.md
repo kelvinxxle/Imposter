@@ -1,46 +1,75 @@
 # Imposter
 
-A deep iOS-native starter scaffold using **Swift + SwiftUI**, with a testable shared core module.
+A cross-platform starter that now includes:
 
-## Why this structure
-
-This repo is designed for a workflow where you may be on **Windows** for day-to-day editing (VS Code/JetBrains), while still building and shipping a native iOS app from a Mac (local, CI, or cloud macOS runner).
-
-- `Package.swift` + `Sources/ImposterCore`: testable pure Swift domain and services.
-- `ios/ImposterApp`: SwiftUI app shell and feature wiring for iOS.
+- **iOS-native scaffold** with Swift + SwiftUI.
+- **Mobile-first web app** you can run on iPhone from Safari without a Mac build.
 
 ## Repository layout
 
 - `Package.swift` — SwiftPM package definition for `ImposterCore`.
 - `Sources/ImposterCore` — domain models, use cases, services.
 - `Tests/ImposterCoreTests` — Linux/macOS runnable tests for the core.
-- `ios/ImposterApp` — iOS app source template (to be opened in Xcode on macOS).
+- `ios/ImposterApp` — SwiftUI app source template (open in Xcode on macOS).
+- `web/` — installable PWA-style web app for iPhone/mobile browsers.
 
-## Local development (Windows-friendly)
+## Play on iPhone (web app)
 
-### 1) Edit from Windows
+1. Serve the `web` folder:
 
-Use VS Code with Swift extension and work inside WSL or a dev container.
+   ```bash
+   cd web
+   python3 -m http.server 8080
+   ```
+
+2. On your iPhone, open:
+
+   `http://<your-computer-ip>:8080`
+
+3. In Safari, tap **Share → Add to Home Screen**.
+4. Launch from Home Screen for a full-screen app-like experience.
+
+### Web game rules
+
+- Configure players, imposters, timer, and category.
+- Every player sees a word privately.
+- **Civilians** share one word; **imposters** receive a closely related word.
+- Discuss, vote, and reveal the result.
+
+
+### One-shot Windows recovery script
+
+If your local clone is missing `web/` files, run:
+
+```powershell
+pwsh -File .\restore-web-app.ps1 -RepoPath C:\Users\Kelvin\Imposter
+```
+
+Then commit and push:
+
+```powershell
+git add README.md web
+git commit -m "Add iPhone-friendly Imposter web app"
+git push origin main
+```
+
+
+If you get a “script file not recognized” error, run:
+
+```powershell
+git pull
+Test-Path .\restore-web-app.ps1
+Test-Path .\scripts\restore-web-app.ps1
+```
+
+Both commands should print `True` before re-running the script.
+
+## iOS-native development (optional)
+
+If you want the native app path later:
 
 ```bash
 swift test
 ```
 
-This validates the core business logic without requiring Xcode.
-
-### 2) Build iOS app from macOS
-
-Options:
-
-- Local Mac with Xcode.
-- GitHub Actions macOS runner.
-- Cloud Mac provider.
-
-Open/create an Xcode project, then add files from `ios/ImposterApp` and local Swift package `ImposterCore`.
-
-## Next steps
-
-1. Create Xcode iOS app target and include `ios/ImposterApp/*` files.
-2. Add signing/team/bundle ID.
-3. Replace mock service implementations with real Apple framework integrations.
-4. Add UI tests and snapshot tests on macOS CI.
+Then wire `ios/ImposterApp` into an Xcode iOS target on macOS.

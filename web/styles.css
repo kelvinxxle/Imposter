@@ -1,0 +1,145 @@
+:root {
+  color-scheme: dark;
+  --bg: radial-gradient(circle at top, #1c2442 0%, #0b1020 60%);
+  --card: rgba(24, 30, 55, 0.9);
+  --text: #ecf0ff;
+  --muted: #a6b0d6;
+  --danger: #ff7b8a;
+  --safe-top: env(safe-area-inset-top, 0px);
+  --safe-bottom: env(safe-area-inset-bottom, 0px);
+}
+
+* {
+  box-sizing: border-box;
+  -webkit-tap-highlight-color: transparent;
+  font-family: -apple-system, BlinkMacSystemFont, "SF Pro Text", "Segoe UI", sans-serif;
+}
+
+body {
+  margin: 0;
+  min-height: 100vh;
+  background: var(--bg);
+  color: var(--text);
+}
+
+.app-shell {
+  max-width: 520px;
+  margin: 0 auto;
+  min-height: 100vh;
+  padding: calc(16px + var(--safe-top)) 16px calc(18px + var(--safe-bottom));
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.topbar h1 {
+  margin: 0;
+  font-size: 2rem;
+}
+
+.subtitle {
+  margin: 2px 0 0;
+  color: var(--muted);
+}
+
+.screen {
+  display: none;
+}
+
+.screen.active {
+  display: block;
+  animation: slideIn 220ms ease;
+}
+
+@keyframes slideIn {
+  from {
+    opacity: 0;
+    transform: translateY(8px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.card {
+  background: var(--card);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 22px;
+  padding: 18px;
+  backdrop-filter: blur(16px);
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.35);
+}
+
+h2 {
+  margin-top: 0;
+}
+
+label {
+  display: block;
+  margin-bottom: 12px;
+  color: var(--muted);
+  font-size: 0.95rem;
+}
+
+input,
+select,
+button {
+  width: 100%;
+  border-radius: 14px;
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  background: rgba(8, 11, 22, 0.6);
+  color: var(--text);
+  font-size: 1rem;
+  padding: 12px;
+  margin-top: 6px;
+}
+
+input:focus,
+select:focus,
+button:focus {
+  outline: 2px solid #79acff;
+  outline-offset: 2px;
+}
+
+button {
+  font-weight: 650;
+  margin-top: 8px;
+  min-height: 46px;
+}
+
+button.primary {
+  background: linear-gradient(180deg, #79acff, #5f88f5);
+  color: #09112a;
+  border: none;
+}
+
+.button-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
+}
+
+.timer {
+  text-align: center;
+  font-size: 3rem;
+  font-weight: 700;
+  letter-spacing: 2px;
+  margin: 12px 0;
+}
+
+.role {
+  font-size: 1.5rem;
+  margin: 12px 0 6px;
+}
+
+.hint {
+  color: var(--muted);
+  margin-top: 0;
+}
+
+.error {
+  color: var(--danger);
+  min-height: 20px;
+  margin: 8px 0 0;
+}
