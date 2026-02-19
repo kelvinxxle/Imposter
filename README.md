@@ -3,66 +3,55 @@
 A cross-platform starter that now includes:
 
 - **iOS-native scaffold** with Swift + SwiftUI.
-- **Mobile-first web app** you can run on iPhone from Safari without a Mac build.
+- **Mobile-first web app** that can run as an iPhone Home Screen app.
 
 ## Repository layout
 
-- `Package.swift` — SwiftPM package definition for `ImposterCore`.
-- `Sources/ImposterCore` — domain models, use cases, services.
-- `Tests/ImposterCoreTests` — Linux/macOS runnable tests for the core.
-- `ios/ImposterApp` — SwiftUI app source template (open in Xcode on macOS).
-- `web/` — installable PWA-style web app for iPhone/mobile browsers.
+- `Package.swift` - SwiftPM package definition for `ImposterCore`.
+- `Sources/ImposterCore` - domain models, use cases, services.
+- `Tests/ImposterCoreTests` - Linux/macOS runnable tests for the core.
+- `ios/ImposterApp` - SwiftUI app source template (open in Xcode on macOS).
+- `web/` - installable PWA-style web app for iPhone/mobile browsers.
 
-## Play on iPhone (web app)
+## Run on iPhone without your computer hosting a server (recommended)
 
-1. Serve the `web` folder:
+This repo now includes GitHub Pages deployment at `.github/workflows/deploy-web.yml`.
 
-   ```bash
-   cd web
-   python3 -m http.server 8080
-   ```
+1. Push this project to a GitHub repository (branch: `main`).
+2. In GitHub, open **Settings -> Pages** and set **Source** to **GitHub Actions**.
+3. Push any change under `web/` (or run the workflow manually from the Actions tab).
+4. After deployment finishes, open:
 
-2. On your iPhone, open:
+   `https://<your-github-username>.github.io/<your-repo-name>/`
 
-   `http://<your-computer-ip>:8080`
+5. On iPhone Safari, tap **Share -> Add to Home Screen**.
 
-3. In Safari, tap **Share → Add to Home Screen**.
-4. Launch from Home Screen for a full-screen app-like experience.
+After first successful load, the service worker caches assets for offline play.
 
-### Web game rules
+## Local run (optional)
 
-- Configure players, imposters, timer, and category.
-- Every player sees a word privately.
-- **Civilians** share one word; **imposters** receive a closely related word.
+From repo root:
+
+```powershell
+pwsh -File .\serve-web.ps1 -Port 8080
+```
+
+Then open the printed `http://<your-computer-ip>:8080` URL on iPhone (same Wi-Fi).
+
+## Web game rules
+
+- Configure player count, imposter count, and player names.
+- Use the **Categories** button to pick one or more categories.
+- Add your own custom categories with custom keywords.
+- Every round picks one selected category at random.
+- **Civilians** receive one shared keyword.
+- **Imposters** receive no keyword, only the category.
 - Discuss, vote, and reveal the result.
 
+## Important platform note
 
-### One-shot Windows recovery script
-
-If your local clone is missing `web/` files, run:
-
-```powershell
-pwsh -File .\restore-web-app.ps1 -RepoPath C:\Users\Kelvin\Imposter
-```
-
-Then commit and push:
-
-```powershell
-git add README.md web
-git commit -m "Add iPhone-friendly Imposter web app"
-git push origin main
-```
-
-
-If you get a “script file not recognized” error, run:
-
-```powershell
-git pull
-Test-Path .\restore-web-app.ps1
-Test-Path .\scripts\restore-web-app.ps1
-```
-
-Both commands should print `True` before re-running the script.
+Without macOS/Xcode, you cannot build/sign a native `.ipa` iOS app yourself.
+The practical no-Mac path is this PWA deployment route (GitHub Pages + Add to Home Screen).
 
 ## iOS-native development (optional)
 

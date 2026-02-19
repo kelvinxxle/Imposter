@@ -1,4 +1,4 @@
-const CACHE_NAME = "imposter-web-v1";
+const CACHE_NAME = "imposter-web-v3";
 const ASSETS = ["./", "./index.html", "./styles.css", "./app.js", "./manifest.webmanifest", "./icon.svg"];
 
 self.addEventListener("install", (event) => {
